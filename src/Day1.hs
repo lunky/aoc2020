@@ -3,7 +3,7 @@ module Day1
       ,day1b
     ) where
 
-import Data.List (find, subsequences,tails)
+import Data.List (find, tails)
 
 day1 :: String -> Int
 day1 input =  multi $ parseInput input
