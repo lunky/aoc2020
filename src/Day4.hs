@@ -3,10 +3,11 @@ module Day4
       ,day4b
     ) where
 
-import Aoc
-import Data.List
-import Data.Char
-import Data.List.Split
+import Aoc (countTrue)
+import Data.List (isSuffixOf)
+import Data.Char (isNumber,isHexDigit)
+import Data.List.Split (splitOn)
+
 data Passport = Passport {ecl::String, pid::String, eyr::String, hcl::String, byr::String, cid::Int, hgt::String} 
   deriving (Eq,Ord,Show)
 
