@@ -4,16 +4,17 @@ module Day2
     ) where
 
 import Data.List.Split
+import Aoc
 
 day2 :: String -> Int
-day2 input = length $ filter(==True) $  map day2' $ parseInput input
+day2 input = countTrue $  map day2' $ parseInput input
 
 day2b :: String -> Int
-day2b input = length $ filter(==True) $ map day2b' $ parseInput input
+day2b input = countTrue $ map day2b' $ parseInput input
 
 
 
-parseInput :: String -> [([Int], Char, [Char])]
+parseInput :: String -> [([Int], Char, String)]
 parseInput input = map ((\[x,y,z]-> (map (\y->read y::Int) $ splitOn "-" x,head y, z)) .words) $ lines input
 
 

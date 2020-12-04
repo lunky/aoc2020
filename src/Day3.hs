@@ -4,8 +4,6 @@ module Day3
       ,day3b
     ) where
 
-import Data.List (find)
-
 day3 :: String -> Int
 day3 input = day3' (words input) 0 3 1 
 

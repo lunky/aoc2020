@@ -26,23 +26,32 @@ library:
   source-dirs: src
   dependencies:
     - split
+    - megaparsec
+    - text
+    - containers
 
 executables:
-  aoc2020-exe:
+  aoc2020x-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
-    - -threaded
+#    - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
     - aoc2020
     - time
+    when:
+    - condition: false
+      other-modules: Paths_aoc2020
 
 tests:
   aoc2020-test:
     main:                Spec.hs
     source-dirs:         test
+    when:
+    - condition: false
+      other-modules: Paths_aoc2020
     ghc-options:
     - -threaded
     - -rtsopts
