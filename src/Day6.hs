@@ -13,10 +13,9 @@ day6 input = sum $ map (length.nub.concat) $ parseInput input
 day6b :: String -> Int
 day6b input =  sum 
   $ map (\y -> countTrue 
-                $ map (\c->((length c) >= length y) ) 
-                $ group.sort 
-                $ concat y ) 
-  $ parseInput input
+      $ map (\c->length c >= length y) 
+      $ group.sort 
+      $ concat y ) $ parseInput input
 
 parseInput :: String -> [[String]]
 parseInput input = map lines $ splitOn "\n\n" input
