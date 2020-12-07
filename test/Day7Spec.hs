@@ -12,13 +12,17 @@ spec = do
       let expected=4
       day7 input `shouldBe` expected
 
-  describe "Day7b" $ 
+  describe "Day7b" $ do
     it "should do sample 1" $ do
       let input=""
       let expected=0
       day7b input `shouldBe` expected
+    it "should do sample 2" $ do
+      let input ="shiny gold bags contain 2 dark red bags.\ndark red bags contain 2 dark orange bags.\ndark orange bags contain 2 dark yellow bags.\ndark yellow bags contain 2 dark green bags.\ndark green bags contain 2 dark blue bags.\ndark blue bags contain 2 dark violet bags.\ndark violet bags contain no other bags.\n"
+      let expected=126
+      day7b input `shouldBe` expected
 
-  describe "Day7b" $ do
+  describe "sumBag" $ do
     it "should do sample 1" $ do
       let bags=[("light red",[(1,"bright white"),(2,"muted yellow")]),("dark orange",[(3,"bright white"),(4,"muted yellow")]),("bright white",[(1,"shiny gold")]),("muted yellow",[(2,"shiny gold"),(9,"faded blue")]),("shiny gold",[(1,"dark olive"),(2,"vibrant plum")]),("dark olive",[(3,"faded blue"),(4,"dotted black")]),("vibrant plum",[(5,"faded blue"),(6,"dotted black")])]
       let input = (1,"faded blue")
@@ -29,7 +33,12 @@ spec = do
       let input = (1,"vibrant plum")
       let expected = 11 
       sumBag bags input `shouldBe` expected
-    it "should do sample 2" $ do
+    it "should do sample 3" $ do
+      let bags=[("light red",[(1,"bright white"),(2,"muted yellow")]),("dark orange",[(3,"bright white"),(4,"muted yellow")]),("bright white",[(1,"shiny gold")]),("muted yellow",[(2,"shiny gold"),(9,"faded blue")]),("shiny gold",[(1,"dark olive"),(2,"vibrant plum")]),("dark olive",[(3,"faded blue"),(4,"dotted black")]),("vibrant plum",[(5,"faded blue"),(6,"dotted black")])]
+      let input = (1,"shiny gold")
+      let expected = 32
+      sumBag bags input `shouldBe` expected
+    it "should do sample 4" $ do
       let bags=[("light red",[(1,"bright white"),(2,"muted yellow")]),("dark orange",[(3,"bright white"),(4,"muted yellow")]),("bright white",[(1,"shiny gold")]),("muted yellow",[(2,"shiny gold"),(9,"faded blue")]),("shiny gold",[(1,"dark olive"),(2,"vibrant plum")]),("dark olive",[(3,"faded blue"),(4,"dotted black")]),("vibrant plum",[(5,"faded blue"),(6,"dotted black")])]
       let input = (1,"shiny gold")
       let expected = 32
