@@ -30,11 +30,11 @@ library:
     - containers
 
 executables:
-  aoc2020x-exe:
+  aoc2020-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
-#    - -threaded
+    - -threaded
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
