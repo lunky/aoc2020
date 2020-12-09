@@ -14,7 +14,7 @@ day8 input = case bootCode' (parseInput input,0,0,[]) of
                _ -> error "shouldn't get here"
 
 day8b :: String -> Int
-day8b input = head $ rights $ day8b' input
+day8b input = head . rights $ day8b' input
 
 day8b' input = map (\y-> bootCode' (y ++ [("nop",0::Int)] ,0,0,[])) possible
   where possible = map (\(i,cmd)->replaceAtIndex i cmd operations) $ nopJmp $ combos operations

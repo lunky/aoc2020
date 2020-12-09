@@ -75,11 +75,13 @@ runDays = do
     let answer = show $ day8b contents
     putStrLn ("day8b: " ++ answer)
 
-    contents <- readFile "data/day9.txt"
-    let answer = show $ day9 contents 
+--    contents <- readFile "data/day9.txt"
+--    let answer = show $ day9 25 contents 
+--    let day9answer = answer
+    let answer = "takes too long to run, skipping"
     putStrLn ("day9: " ++ answer)
 
-    let answer = show $ day9 contents 
+--    let answer = show $ day9b day9answer contents 
     putStrLn ("day9b: " ++ answer)
 
 --    contents <- readFile "data/day10.txt"
