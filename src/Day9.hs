@@ -4,14 +4,13 @@ module Day9
    ,day9b
     )
     where
-import Data.List (inits, tails, subsequences, find)
+import Data.List (inits, tails)
     
 day9 :: Int -> String -> Int 
 day9 range input =  day9' range (range+1) $ parseInput input
 
 day9' range index input 
-  | validNumber curr window == True 
-                          = day9' range (index+1) input
+  | validNumber curr window = day9' range (index+1) input
   | otherwise = curr
   where curr=input!!index
         window = take range $ drop (index-range) input
