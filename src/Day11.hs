@@ -10,7 +10,7 @@ import Data.Map (Map)
 import qualified Data.Map as Map
     
 day11 :: String -> Int 
-day11 input = firstDuplicate $ map (length . filter (=='#') . map snd) $ iterate Day11.round $ parseInput input
+day11 input = firstDuplicate $ map (length.filter (=='#').map snd.Map.toList) $ iterate (Day11.round) $ Map.fromList $ parseInput input
 
 firstDuplicate xs = fst.head.dropWhile (uncurry (/=)) $ (\a->zip a (tail a)) xs 
 
@@ -24,19 +24,17 @@ getXY (x,y) grid = case (find (\(xy,_)->xy==(x,y)) grid) of
 
 getXYMap (x,y) grid = Map.lookup (x,y) grid
 
-adjacent (x,y) grid = map (\y ->getXY y grid) [(x-1,y-1),(x,y-1),(x+1,y-1),
+adjacent (x,y) grid = map (\y ->getXYMap y grid) [(x-1,y-1),(x,y-1),(x+1,y-1),
                                           (x-1,y  ),        (x+1,y  ),
                                           (x-1,y+1),(x,y+1),(x+1,y+1)]
 
-sit ((x,y),seat) grid
-  | seat=='L' && notElem (Just '#') (adjacent (x,y) grid) = ((x,y),'#')
-  | seat=='#' && (>=4) (length $ filter (==Just '#') $ adjacent (x,y) grid) = ((x,y),'L')
-  | otherwise =((x,y),seat)
+sit (x,y) seat grid
+  | seat=='L' && notElem (Just '#') (adjacent (x,y) grid) = '#'
+  | seat=='#' && (>=4) (length $ filter (==Just '#') $ adjacent (x,y) grid) = 'L'
+  | otherwise = seat
 
 
---round grid = Map.foldrWithKey (\y acc -> (sit y seats):acc ) (Map.fromList []) seats
---  where seats = Map.fromList grid
-round grid = map (`sit` grid) grid
+round seats = Map.mapWithKey (\k a ->sit k a seats) seats
 
 parseInput input =  concatMap (\(y,row) -> map (\(x,datum)-> ((x,y),datum) )  row)
                       $ zip [0..] $ map (zip [0..])
