@@ -7,8 +7,7 @@ module Day11
     )
     where
 
-import Data.List (find)
-import Data.Map (Map)
+import Data.Map ()
 import qualified Data.Map as Map
     
 day11 :: String -> Int 
@@ -22,17 +21,13 @@ firstDuplicate xs = fst.head.dropWhile (uncurry (/=)) $ (\a->zip a (tail a)) xs
 day11b :: String -> Int
 day11b input = firstDuplicate $ map (Map.size . Map.filter (=='#')) $ iterate doRoundb $ Map.fromList $ parseInput input
 
+getXYMap (x,y) = Map.lookup (x,y)
 
-getXY (x,y) grid = case (find (\(xy,_)->xy==(x,y)) grid) of 
-                          Just (xy,z) -> Just z
-                          _ -> Nothing
+adjacent (x,y) grid = map (`getXYMap` grid) [(x-1,y-1),(x,y-1),(x+1,y-1),
+                                             (x-1,y  ),        (x+1,y  ),
+                                             (x-1,y+1),(x,y+1),(x+1,y+1)]
 
-getXYMap (x,y) grid = Map.lookup (x,y) grid
-
-adjacent (x,y) grid = map (\y ->getXYMap y grid) [(x-1,y-1),(x,y-1),(x+1,y-1),
-                                          (x-1,y  ),        (x+1,y  ),
-                                          (x-1,y+1),(x,y+1),(x+1,y+1)]
-visible (x,y) grid = map (\z->(takeWhileOneMore (\y -> y /= Just 'L' && y /= Just '#' )) $ map (\y ->getXYMap y grid) z) $ ways (x,y) grid
+visible (x,y) grid = map (takeWhileOneMore (\y -> y /= Just 'L' && y /= Just '#') . map (`getXYMap` grid) ) $ ways (x,y) grid
 
 ways (x,y) grid = 
     [
@@ -58,8 +53,8 @@ sit (x,y) seat grid
   | otherwise = seat
 
 sitb (x,y) seat grid
-  | seat=='L' && (all (==False) $ map (any (==Just '#')) $ visible (x,y) grid) = '#'
-  | seat=='#' && (>=5) (length $ filter (==True) $ map (any (==Just '#')) $ visible (x,y) grid) = 'L'
+  | seat=='L' && all ((==False) . elem (Just '#')) (visible (x,y) grid) = '#'
+  | seat=='#' && (>=5) (length $ filter (==True) $ map (elem (Just '#')) $ visible (x,y) grid) = 'L'
   | otherwise = seat
 
 takeWhileOneMore :: (a -> Bool) -> [a] -> [a]
