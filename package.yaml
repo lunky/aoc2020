@@ -28,6 +28,7 @@ library:
     - split
     - text
     - containers
+    - vector
 
 executables:
   aoc2020-exe:
