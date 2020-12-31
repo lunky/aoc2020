@@ -29,3 +29,16 @@ spec = do
       let input =     V.fromList [5,4,6,7,8,9,1,3,2]
       let expected  = V.fromList [8,9,1,3,4,6,7,2,5]
       move input `shouldBe` expected
+  describe "move'" $ do
+    it "should do move from sample 1" $ do
+      let input =    V.fromList [3,2,5,8,6,4,7,3,9,1]
+      let expected = V.fromList [2,5,8,2,6,4,7,3,9,1]
+      mv input `shouldBe` expected
+    it "should do move from sample 2" $ do
+      let input =    V.fromList [2,5,8,2,6,4,7,3,9,1]
+      let expected = V.fromList [5,3,5,2,6,4,7,8,9,1]
+      mv input `shouldBe` expected
+    it "should do move from sample 3" $ do
+      let input =     V.fromList [5,3,5,2,6,4,7,8,9,1]
+      let expected  = V.fromList [8,3,5,4,6,8,7,2,9,1]
+      mv input `shouldBe` expected

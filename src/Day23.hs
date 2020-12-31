@@ -1,18 +1,20 @@
-{-# LANGUAGE BangPatterns #-}
 module Day23
     ( 
     day23
    ,day23b
---   ,day23b'
    ,move
+   ,mv
     )
     where
+
 import Data.Char (digitToInt,intToDigit)
 import Data.List (iterate')
 import qualified Data.Vector as V
 
+import Control.Monad
 import Control.Monad.ST (ST(..), runST)
 import qualified Data.Vector.Mutable as MV
+import Data.Vector ((!))
 
 day23 :: Int -> String -> Int 
 day23 count input = rearrange 
@@ -23,54 +25,11 @@ day23 count input = rearrange
 
 iterateN num f x = (!! num) $ iterate' f x
 
-
-{-day23' count input = rearrange $ V.toList $ scoreGame count (parseInput input)-}
-  {-where-}
-    {-scoreGame cs n = runST $ do-}
-      {-iterateN n move' cs-}
-
-
-test2 :: String -> V.Vector Int
-test2 input = runST $ do
-  v <- go input            -- call test, which performs the allocation
-  t <- V.freeze v
-  return t
-
-go :: String -> ST s (MV.MVector s Int)
-go input = do
-   v <- V.thaw $ V.fromList $ parseInput input
-   MV.write v 3 2000    -- modify it
-   x <- MV.read v 3     -- access it
-   MV.write v 4 (x+1)   
-   return v 
-
-
-day23b :: String -> Int
-day23b input = 0
-
-day23b' input = product $ take 2  $ tail $ dropWhile (/=1) 
-                        $ V.toList 
-                        $ (!! (10^7) )
-                        $ iterate' move $ V.fromList $ extendCups $ parseInput input
-
 move vec = insertCups (nextdestCup (front-1) intermediate) theThree intermediate 
   where front = V.head vec
         rest = V.tail vec
         theThree = V.take 3 rest
-        intermediate = (V.drop 3 rest) V.++ (V.singleton front)
-
-move' vec = insertCups' (nextdestCup' (front-1) intermediate) theThree intermediate 
-  where front = V.head vec
-        rest = V.tail vec
-        theThree = V.take 3 rest
-        intermediate = (V.drop 3 rest) V.++ (V.singleton front)
-
-nextdestCup' x xs = case V.elemIndex x xs of
-                        Just y -> y
-                        Nothing -> nextdestCup nextIndex xs
-  where nextIndex = case x of 
-                      0 -> 9
-                      y -> y - 1
+        intermediate = V.drop 3 rest V.++ V.singleton front
 
 nextdestCup x xs = case V.elemIndex x xs of
                         Just y -> y
@@ -79,17 +38,71 @@ nextdestCup x xs = case V.elemIndex x xs of
                       0 -> 9
                       y -> y - 1
 
-insertCups' x xs xss = beginning  V.++ xs V.++ (V.drop (x+1) xss)
-  where beginning = (V.take (x+1) xss) 
-
 insertCups :: Int -> V.Vector a -> V.Vector a -> V.Vector a
-insertCups x xs xss = beginning  V.++ xs V.++ (V.drop (x+1) xss)
-  where beginning = (V.take (x+1) xss) 
+insertCups x xs xss = beginning  V.++ xs V.++ V.drop (x+1) xss
+  where beginning = V.take (x+1) xss 
 
 rearrange xs = (\y->read y::Int) $ map intToDigit  (tail $ dropWhile (/=1) xs ++ takeWhile (/=1) xs)
 
-extendCups cups = cups ++ [maximum cups+1..10^6]
 
+day23b :: String -> Int
+day23b input = runST $ do
+    let cups = 10^6
+    v <- initState (parseInput input) cups
+    makeNMoves cups (10^7) v
+    x <- MV.read v 1
+    y <- MV.read v x
+    return (x * y) 
+
+makeNMoves cups n v = do
+  forM_ [1..n]  (\_ -> moveb cups v)
+
+
+
+initState :: [Int] -> Int -> ST s (MV.MVector s Int)
+initState l nCups = do
+    let expanded = l ++ [10..nCups]
+    v <- MV.replicate (nCups + 1) 0
+    forM_ (zip expanded (tail expanded)) $ \(i,n) -> do
+        MV.write v i n
+    MV.write v (last expanded) (head expanded)
+    MV.write v 0 (head expanded)
+    return v
+
+-- helper method for testing moveb
+mv input = runST $ do 
+    mv <- V.thaw input 
+    moveb 9 mv
+    V.freeze mv
+
+moveb :: Int -> MV.MVector s Int -> ST s ()
+moveb cups v = do
+    curr <- MV.read v 0
+    p1 <- MV.read v curr
+    p2 <- MV.read v p1
+    p3 <- MV.read v p2
+    notPicked <- MV.read v p3
+    let dest = updateCup cups (p1,p2,p3) curr
+    postDest <- MV.read v dest
+    MV.write v curr notPicked
+    MV.write v dest p1
+    MV.write v p3 postDest
+    MV.write v 0 notPicked
+
+updateCup :: Int -> (Int,Int,Int) -> Int -> Int
+updateCup maxCups (a, b, c) curr
+    | p1 /= a && p1 /= b && p1 /= c = p1
+    | p2 /= a && p2 /= b && p2 /= c = p2
+    | p3 /= a && p3 /= b && p3 /= c = p3
+    | otherwise = p4
+        where p1 = if curr  == 1 then maxCups else curr  - 1
+              p2 = if p1 == 1 then maxCups else p1 - 1
+              p3 = if p2 == 1 then maxCups else p2 - 1
+              p4 = if p3 == 1 then maxCups else p3 - 1
+
+
+-- helper method for viewing linked list
+_translate vec = V.scanl (\acc y -> vec!acc) 0 vec
 
 parseInput = map digitToInt
 _input = "389125467"

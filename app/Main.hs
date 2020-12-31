@@ -136,11 +136,11 @@ runDays = do
     {-let answer = show $ day16b contents-}
     {-putStrLn ("day16b: " ++ answer)-}
 
-    {-let contents = "598162734"-}
+    let contents = "598162734"
     {-let answer = show $ day23 100 contents -}
     {-putStrLn ("day23: " ++ answer)-}
-    {-let answer = show $ day23b' contents -}
-    {-putStrLn ("day23b: " ++ answer)-}
+    let answer = show $ day23b contents 
+    putStrLn ("day23b: " ++ answer)
 
     let answer = show $ day16 contents 
     putStrLn ("day16: " ++ answer)
