@@ -60,3 +60,4 @@ tests:
     - aoc2020
     - hspec
     - containers
+    - vector
