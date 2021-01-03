@@ -1,7 +1,7 @@
-module Day18
+module Day18b
     (
-    day18
-   ,calculate
+    day18b
+   ,calculateb
     )
     where
 
@@ -18,9 +18,8 @@ import Aoc (   eos
               ,between
               ,Parser)
 
-
-day18 :: String -> Int
-day18 input =  case fmap sum $ mapM calculate $ lines input of
+day18b :: String -> Int
+day18b input =  case fmap sum $ mapM calculateb $ lines input of
                   Just x -> fromIntegral x
                   _ -> error "error, something didn't compute"
 
@@ -43,7 +42,7 @@ add :: Parser String Expr
 add = Add <$> factor <*> (spaceChar '+' *> term)
 
 mul :: Parser String Expr
-mul = Mul <$> factor <*> (spaceChar '*' *> term)
+mul = Mul <$> term <*> (spaceChar '*' *> expr)
 
 parens = between (spaceChar ')') (spaceChar '(') expr
 
@@ -51,15 +50,14 @@ factor :: Parser String Expr
 factor = literal <|> parens
 
 term :: Parser String Expr
-term = add <|> mul <|> factor
+term = add <|> factor
 
 expr :: Parser String Expr
-expr = term
+expr = mul <|> term
 
 parse :: String -> Maybe Expr
 parse = fmap fst . runParser (expr <* eos)
 
-calculate :: String -> Maybe Integer
-calculate str = (fmap eval . parse) $ reverse str
-
+calculateb :: String -> Maybe Integer
+calculateb str = (fmap eval . parse) $ reverse str
 

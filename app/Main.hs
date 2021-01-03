@@ -19,6 +19,8 @@ import Day12
 import Day14
 import Day15
 import Day16
+import Day18
+import Day18b
 import Day23
 
 timeStamp :: IO a -> IO ()
@@ -130,21 +132,25 @@ runDays = do
     let answer = "takes too long to run, skipping"
 --    let answer = show $ day15b contents
     putStrLn ("day15b: " ++ answer)
-    {-contents <- readFile "data/day16.txt"-}
-    {-let answer = show $ day16 contents -}
-    {-putStrLn ("day16: " ++ answer)-}
-    {-let answer = show $ day16b contents-}
-    {-putStrLn ("day16b: " ++ answer)-}
 
-    let contents = "598162734"
-    {-let answer = show $ day23 100 contents -}
-    {-putStrLn ("day23: " ++ answer)-}
-    let answer = show $ day23b contents 
-    putStrLn ("day23b: " ++ answer)
-
+    contents <- readFile "data/day16.txt"
     let answer = show $ day16 contents 
     putStrLn ("day16: " ++ answer)
     let answer = show $ day16b contents
     putStrLn ("day16b: " ++ answer)
+
+    contents <- readFile "data/day18.txt"
+    let answer = show $ day18 contents 
+    putStrLn ("day18: " ++ answer)
+    let answer = show $ day18b contents
+    putStrLn ("day18b: " ++ answer)
+
+    let contents = "598162734"
+    let answer = show $ day23 100 contents 
+    putStrLn ("day23: " ++ answer)
+    {-let answer = show $ day23b contents -}
+    let answer = "takes too long to run, skipping"
+    putStrLn ("day23b: " ++ answer)
+
 ----main :: IO ()
 --main = someFunc
