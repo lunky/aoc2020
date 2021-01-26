@@ -6,14 +6,11 @@ module Day18
     where
 
 import Control.Applicative
-import Data.Char
-import Data.Bifunctor
 import Aoc (   eos
               ,runParser
               ,spaces
               ,digit
               ,many1
-              ,alpha
               ,char
               ,between
               ,Parser)
