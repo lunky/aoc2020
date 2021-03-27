@@ -19,6 +19,7 @@ import Day12
 import Day14
 import Day15
 import Day16
+import Day17
 import Day18
 import Day18b
 import Day23
@@ -138,6 +139,10 @@ runDays = do
     putStrLn ("day16: " ++ answer)
     let answer = show $ day16b contents
     putStrLn ("day16b: " ++ answer)
+
+    contents <- readFile "data/day17.txt"
+    let answer = show $ day17 contents 
+    putStrLn ("day17: " ++ answer)
 
     contents <- readFile "data/day18.txt"
     let answer = show $ day18 contents 
