@@ -1,11 +1,8 @@
-{-# LANGUAGE TupleSections #-}
 module Day17
     (
     day17
-   ,day17b
    ,tick
    ,lives
---   ,printGameState
    ,GameState(..)
    ,Point(..)
 ) where
@@ -17,16 +14,12 @@ import qualified Data.Map as Map
 day17 :: String -> Int
 day17 input = length $ day17' input 6
   
+{-# ANN module "HLint: ignore Use !!" #-}
 day17' input count = (\(GameState state)->state) $
-  head$
+  head $
   drop count $
   iterate tick $ 
-  (\y->GameState y) $ map (Point . fst)$ filter(\y->snd y=='#') $ parseInput input
-
-day17b :: String -> Int
-day17b input = 0
-
-
+  GameState $ map (Point . fst)$ filter(\y->snd y=='#') $ parseInput input
 
 newtype GameState = GameState [Point] deriving (Show,Eq)
 newtype Point = Point (Int,Int,Int) deriving (Show,Eq,Ord)
